@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "project": {
+    "initializedAt": "2026-05-22T09:22:54.341Z",
+    "merchantDisplayName": null,
+    "merchantId": "acct_1TSDig2SQKDdE7Mh",
+    "projectId": "project_61UjDFWifWSSz700P16Ubbg2NP8CRwkNsQja84DzM9wm",
+    "projectName": "papamart"
+  },
+  "providers": {
+    "clerk": {
+      "accountRequestId": "fprvcnn_61UbbnWHVz1JUmarK16Ubbg2NP8CRwkNsQja84DzMMem",
+      "configuration": {},
+      "linkedAt": "2026-05-01T09:58:34.537Z",
+      "providerId": "prvdr_61UGOeSW4e0T9Etwn537w",
+      "providerName": "Clerk",
+      "redirectUrl": null,
+      "requestedAt": "2026-05-01T09:58:34.537Z",
+      "status": "complete"
+    }
+  },
+  "resources": {
+    "clerk-auth": {
+      "configuration": {
+        "app_name": "papamart"
+      },
+      "createdAt": "2026-05-22T09:25:05.284Z",
+      "lastRevealedAt": "2026-05-22T09:25:06.484Z",
+      "lastStatus": "complete",
+      "name": "clerk-auth",
+      "providerId": "prvdr_61UGOeSW4e0T9Etwn537w",
+      "providerName": "Clerk",
+      "resourceId": "fres_61UjDHaxhtxizikq316Ubbg2NP8CRwkNsQja84DzMDma",
+      "serviceId": "auth"
+    },
+    "clerk-plan": {
+      "configuration": {},
+      "createdAt": "2026-05-22T09:25:00.100Z",
+      "lastRevealedAt": "2026-05-22T09:25:01.134Z",
+      "lastStatus": "complete",
+      "name": "clerk-plan",
+      "providerId": "prvdr_61UGOeSW4e0T9Etwn537w",
+      "providerName": "Clerk",
+      "resourceId": "fres_61UjDHV42W4nmxyCk16Ubbg2NP8CRwkNsQja84DzM21A",
+      "serviceId": "hobby"
+    }
+  }
+}

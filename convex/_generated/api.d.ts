@@ -17,6 +17,7 @@ import type * as admin_products from "../admin/products.js";
 import type * as categories from "../categories.js";
 import type * as checkout from "../checkout.js";
 import type * as crons from "../crons.js";
+import type * as embeddings from "../embeddings.js";
 import type * as favorites from "../favorites.js";
 import type * as http from "../http.js";
 import type * as orders from "../orders.js";
@@ -40,6 +41,7 @@ declare const fullApi: ApiFromModules<{
   categories: typeof categories;
   checkout: typeof checkout;
   crons: typeof crons;
+  embeddings: typeof embeddings;
   favorites: typeof favorites;
   http: typeof http;
   orders: typeof orders;

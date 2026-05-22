@@ -488,6 +488,11 @@ async function runSeedCatalogWithImages(ctx: ActionCtx): Promise<{
     currency,
   });
 
+  // Generate vector embeddings for every freshly-seeded product. The
+  // backfill schedules one action per product so it can't blow past the
+  // single-action runtime limit and runs in parallel.
+  await ctx.runAction(internal.embeddings.backfillAll, { force: true });
+
   return {
     categoriesInserted: inserted.categoriesInserted,
     productsInserted: inserted.productsInserted,

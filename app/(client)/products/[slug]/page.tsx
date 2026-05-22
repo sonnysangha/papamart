@@ -17,6 +17,7 @@ import {
 import Price from "@/components/client/Price";
 import AddToCartButton from "@/components/client/AddToCartButton";
 import FavoriteButton from "@/components/client/FavoriteButton";
+import SimilarItems from "@/components/client/SimilarItems";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -133,6 +134,10 @@ export default function ProductPage({ params }: PageProps) {
           </div>
         </div>
       </div>
+
+      <Separator className="my-10" />
+
+      <SimilarItems productId={product._id} />
     </div>
   );
 }

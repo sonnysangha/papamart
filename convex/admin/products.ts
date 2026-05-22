@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query, type QueryCtx } from "../_generated/server";
 import type { Doc } from "../_generated/dataModel";
+import { internal } from "../_generated/api";
 import schema from "../schema";
 import { requireAdmin } from "./_helpers";
 
@@ -36,14 +37,14 @@ export const list = query({
     const products =
       trimmed.length > 0
         ? await ctx.db
-            .query("products")
-            .withSearchIndex("search_name", (q) => q.search("name", trimmed))
-            .take(100)
+          .query("products")
+          .withSearchIndex("search_name", (q) => q.search("name", trimmed))
+          .take(100)
         : await ctx.db
-            .query("products")
-            .withIndex("by_active")
-            .order("desc")
-            .take(200);
+          .query("products")
+          .withIndex("by_active")
+          .order("desc")
+          .take(200);
 
     return await Promise.all(products.map((p) => hydrate(ctx, p)));
   },
@@ -106,7 +107,7 @@ export const create = mutation({
 
     const currency = process.env.NEXT_PUBLIC_DEFAULT_CURRENCY ?? "gbp";
 
-    return await ctx.db.insert("products", {
+    const productId = await ctx.db.insert("products", {
       name: args.name.trim(),
       slug: args.slug.trim(),
       description: args.description,
@@ -119,6 +120,15 @@ export const create = mutation({
       isActive: args.isActive,
       createdAt: Date.now(),
     });
+
+    // Generate the vector embedding for "similar items" off the request path.
+    await ctx.scheduler.runAfter(
+      0,
+      internal.embeddings.generateForProduct,
+      { productId },
+    );
+
+    return productId;
   },
 });
 
@@ -201,6 +211,23 @@ export const update = mutation({
     if (Object.keys(patch).length > 0) {
       await ctx.db.patch(args.productId, patch);
     }
+
+    // Re-embed only when fields that flow into the embedding text actually
+    // changed. Price/stock/image edits don't affect semantic similarity.
+    const semanticChanged =
+      (patch.name !== undefined && patch.name !== product.name) ||
+      (patch.description !== undefined &&
+        patch.description !== product.description) ||
+      (patch.categoryId !== undefined &&
+        patch.categoryId !== product.categoryId);
+    if (semanticChanged) {
+      await ctx.scheduler.runAfter(
+        0,
+        internal.embeddings.generateForProduct,
+        { productId: args.productId },
+      );
+    }
+
     return null;
   },
 });

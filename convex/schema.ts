@@ -52,6 +52,9 @@ export default defineSchema({
     unit: v.string(),
     isActive: v.boolean(),
     createdAt: v.number(),
+    // Populated asynchronously by `internal.embeddings.generateForProduct`.
+    // Used by the `by_embedding` vector index to power "similar items" lookups.
+    embedding: v.optional(v.array(v.float64())),
   })
     .index("by_slug", ["slug"])
     .index("by_category", ["categoryId"])
@@ -59,6 +62,11 @@ export default defineSchema({
     .searchIndex("search_name", {
       searchField: "name",
       filterFields: ["categoryId", "isActive"],
+    })
+    .vectorIndex("by_embedding", {
+      vectorField: "embedding",
+      dimensions: 1536,
+      filterFields: ["isActive", "categoryId"],
     }),
 
   favorites: defineTable({
